@@ -8,24 +8,26 @@ import Magnetic from "@/components/Magnetic";
 
 export default function HomePage() {
   useEffect(() => {
-    // Cursor follows mouse
     const cursor = document.querySelector(".mag-cursor") as HTMLElement | null;
     if (!cursor) return;
 
     function move(e: MouseEvent) {
-      cursor.style.left = e.clientX + "px";
-      cursor.style.top = e.clientY + "px";
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
     }
 
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
-  const suites = ["/images/room2", "/images/room3", "/images/room4", "/images/room5", "/images/room6", "/images/room7"];
+  const suites = ["room2","room3","room4","room5","room6","room7"];
   const gallery = [
-    "images/room1","images/room2","images/room3","images/room4","images/room5","images/room6","images/room7",
-    "images/bar1","images/bar2","images/ensuite1","images/dining","images/desk"
+    "room1","room2","room3","room4","room5","room6","room7",
+    "bar1","bar2","ensuite1","dining","desk"
   ];
+
+  // safely return an image path
+  const img = (name: string) => `/${name}.jpg`;
 
   return (
     <AnimatePresence mode="wait">
@@ -37,10 +39,8 @@ export default function HomePage() {
         transition={{ duration: 0.8 }}
         className="bg-white text-gray-900"
       >
-        {/* Magnetic cursor */}
         <div className="mag-cursor fixed pointer-events-none z-[9999]"></div>
 
-        {/* NAV */}
         <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-white/30 border-b border-white/10 py-4">
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <span className="tracking-widest uppercase text-sm">Honeybear Lodge</span>
@@ -57,9 +57,10 @@ export default function HomePage() {
         <header className="relative h-screen flex items-end">
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/room2.jpg')" }}
+            style={{ backgroundImage: `url(${img("room2")})` }}
           />
           <div className="absolute inset-0 bg-black/35" />
+
           <div className="relative z-10 mx-auto max-w-4xl text-center pb-24 px-6">
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
@@ -69,6 +70,7 @@ export default function HomePage() {
             >
               Honeybear Guest Lodge
             </motion.h1>
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -80,17 +82,11 @@ export default function HomePage() {
           </div>
         </header>
 
-        {/* Suites */}
+        {/* SUITES */}
         <section id="rooms" className="py-28 max-w-7xl mx-auto px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
-            className="text-3xl text-center tracking-wide uppercase mb-12"
-          >
+          <h2 className="text-3xl text-center tracking-wide uppercase mb-12">
             Our Suites
-          </motion.h2>
+          </h2>
 
           <div className="grid md:grid-cols-3 gap-10">
             {suites.map((s) => (
@@ -99,7 +95,7 @@ export default function HomePage() {
                   <div className="rounded-2xl overflow-hidden shadow-lg">
                     <div
                       className="h-[420px] bg-cover bg-center"
-                      style={{ backgroundImage: `url('/images/room2${s}.jpg')` }}
+                      style={{ backgroundImage: `url(${img(s)})` }}
                     />
                     <div className="p-6">
                       <h3 className="uppercase tracking-wide text-lg">Luxury Suite</h3>
@@ -114,7 +110,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Wellness */}
+        {/* WELLNESS */}
         <section id="wellness" className="py-28 bg-gray-50">
           <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -129,23 +125,17 @@ export default function HomePage() {
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <div
                 className="h-[380px] bg-cover bg-center"
-                style={{ backgroundImage: "url('/bar2.jpg')" }}
+                style={{ backgroundImage: `url(${img("bar2")})` }}
               />
             </div>
           </div>
         </section>
 
-        {/* Gallery */}
+        {/* GALLERY */}
         <section id="gallery" className="py-28 max-w-7xl mx-auto px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
-            className="text-3xl text-center tracking-wide uppercase mb-12"
-          >
+          <h2 className="text-3xl text-center tracking-wide uppercase mb-12">
             Gallery
-          </motion.h2>
+          </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {gallery.map((g) => (
@@ -156,7 +146,7 @@ export default function HomePage() {
                 >
                   <div
                     className="h-48 bg-cover bg-center"
-                    style={{ backgroundImage: `url('/images/room3.jpg')` }}
+                    style={{ backgroundImage: `url(${img(g)})` }}
                   />
                 </motion.div>
               </Magnetic>
@@ -164,7 +154,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Footer */}
+        {/* FOOTER */}
         <footer id="contact" className="py-12 bg-black text-white text-center">
           <div className="max-w-4xl mx-auto">
             <p className="text-sm">
