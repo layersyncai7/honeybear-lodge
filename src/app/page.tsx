@@ -8,23 +8,24 @@ import Magnetic from "@/components/Magnetic";
 
 export default function HomePage() {
   useEffect(() => {
-    // cursor element follows mouse
+    // Cursor follows mouse
     const cursor = document.querySelector(".mag-cursor") as HTMLElement | null;
     if (!cursor) return;
-    let raf = 0;
+
     function move(e: MouseEvent) {
-      // small lerp for smooth trailing
-      const x = e.clientX;
-      const y = e.clientY;
-      cursor.style.left = x + "px";
-      cursor.style.top = y + "px";
+      cursor.style.left = e.clientX + "px";
+      cursor.style.top = e.clientY + "px";
     }
+
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
   const suites = ["room2", "room3", "room4", "room5", "room6", "room7"];
-  const gallery = ["room1","room2","room3","room4","room5","room6","room7","bar1","bar2","ensuite1","dining","desk"];
+  const gallery = [
+    "room1","room2","room3","room4","room5","room6","room7",
+    "bar1","bar2","ensuite1","dining","desk"
+  ];
 
   return (
     <AnimatePresence mode="wait">
@@ -36,7 +37,7 @@ export default function HomePage() {
         transition={{ duration: 0.8 }}
         className="bg-white text-gray-900"
       >
-        {/* Magnetic cursor element */}
+        {/* Magnetic cursor */}
         <div className="mag-cursor fixed pointer-events-none z-[9999]"></div>
 
         {/* NAV */}
@@ -68,7 +69,12 @@ export default function HomePage() {
             >
               Honeybear Guest Lodge
             </motion.h1>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="text-lg text-white/90">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-lg text-white/90"
+            >
               Redefining boutique African hospitality
             </motion.p>
           </div>
@@ -76,19 +82,30 @@ export default function HomePage() {
 
         {/* Suites */}
         <section id="rooms" className="py-28 max-w-7xl mx-auto px-6">
-          <motion.h2 initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9 }} className="text-3xl text-center tracking-wide uppercase mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9 }}
+            className="text-3xl text-center tracking-wide uppercase mb-12"
+          >
             Our Suites
           </motion.h2>
 
           <div className="grid md:grid-cols-3 gap-10">
-            {suites.map((s, i) => (
+            {suites.map((s) => (
               <ParallaxCard key={s}>
                 <Magnetic>
                   <div className="rounded-2xl overflow-hidden shadow-lg">
-                    <div className="h-[420px] bg-cover bg-center" style={{ backgroundImage: `url('/${s}.jpg')` }} />
+                    <div
+                      className="h-[420px] bg-cover bg-center"
+                      style={{ backgroundImage: `url('/${s}.jpg')` }}
+                    />
                     <div className="p-6">
                       <h3 className="uppercase tracking-wide text-lg">Luxury Suite</h3>
-                      <p className="text-sm text-muted-foreground mt-2">Elegant rooms inspired by natural textures.</p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Elegant rooms inspired by natural textures.
+                      </p>
                     </div>
                   </div>
                 </Magnetic>
@@ -101,26 +118,46 @@ export default function HomePage() {
         <section id="wellness" className="py-28 bg-gray-50">
           <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl uppercase tracking-wide mb-6">Wellness & Serenity</h2>
-              <p className="text-muted-foreground leading-relaxed">Experience restorative calm in our curated wellness spaces.</p>
+              <h2 className="text-3xl uppercase tracking-wide mb-6">
+                Wellness & Serenity
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Experience restorative calm in our curated wellness spaces.
+              </p>
             </div>
+
             <div className="rounded-2xl overflow-hidden shadow-lg">
-              <div className="h-[380px] bg-cover bg-center" style={{ backgroundImage: "url('/bar2.jpg')" }} />
+              <div
+                className="h-[380px] bg-cover bg-center"
+                style={{ backgroundImage: "url('/bar2.jpg')" }}
+              />
             </div>
           </div>
         </section>
 
         {/* Gallery */}
         <section id="gallery" className="py-28 max-w-7xl mx-auto px-6">
-          <motion.h2 initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9 }} className="text-3xl text-center tracking-wide uppercase mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9 }}
+            className="text-3xl text-center tracking-wide uppercase mb-12"
+          >
             Gallery
           </motion.h2>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {gallery.map((g, idx) => (
+            {gallery.map((g) => (
               <Magnetic key={g}>
-                <motion.div whileHover={{ scale: 1.02 }} className="rounded-xl overflow-hidden shadow-lg">
-                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: `url('/${g}.jpg')` }} />
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="rounded-xl overflow-hidden shadow-lg"
+                >
+                  <div
+                    className="h-48 bg-cover bg-center"
+                    style={{ backgroundImage: `url('/${g}.jpg')` }}
+                  />
                 </motion.div>
               </Magnetic>
             ))}
@@ -130,7 +167,9 @@ export default function HomePage() {
         {/* Footer */}
         <footer id="contact" className="py-12 bg-black text-white text-center">
           <div className="max-w-4xl mx-auto">
-            <p className="text-sm">Honeybear Guest Lodge © {new Date().getFullYear()}</p>
+            <p className="text-sm">
+              Honeybear Guest Lodge © {new Date().getFullYear()}
+            </p>
           </div>
         </footer>
       </motion.div>
