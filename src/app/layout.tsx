@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ClientGlobals from "@/components/ClientGlobals";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
 
@@ -32,8 +33,16 @@ export default function RootLayout({
           src="//unpkg.com/same-runtime/dist/index.global.js"
         />
       </head>
+
       <body suppressHydrationWarning className="antialiased">
-        <ClientBody>{children}</ClientBody>
+        {/* Runs your global client-side scripts correctly */}
+        <ClientGlobals />
+
+        {/* Optional client wrapper if you use ClientBody */}
+        <ClientBody />
+
+        {/* Main application content */}
+        {children}
       </body>
     </html>
   );
