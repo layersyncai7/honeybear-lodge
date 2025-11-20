@@ -7,26 +7,34 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 /**
- * Page: Honeybear Guest Lodge (production-ready)
- * - Uses images from /public/images/<name>.jpg
- * - Includes magnetic cursor + parallax cards implemented inline
- * - Uses framer-motion for entrance/hover animations
- * - crossOrigin fixed in Head (anonymous)
+ * Production-ready page.tsx
+ * - Uses images from /public/images/*.jpg
+ * - Classic <link> Google Fonts in Head with crossOrigin="anonymous"
+ * - Framer Motion v10-safe easing (string values)
+ * - Magnetic cursor + parallax cards
+ * - No TypeScript errors (ease arrays removed, crossOrigin fixed)
  */
 
-/* Small typed helpers for TS */
-type SuiteKey = 'room1' | 'room2' | 'room3' | 'room4' | 'room5' | 'room6' | 'room7';
-
+/* Fonts (CSS variables will reference these families) */
 const headingFont = 'Playfair Display, serif';
 const uiFont = 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial';
 
+/* Motion presets (TypeScript-safe) */
 const fadeUp = {
-  initial: { opacity: 0, y: 12 },
+  initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.9, ease: [0.2, 0.8, 0.2, 1] },
+  transition: { duration: 0.9, ease: 'easeOut' as const },
 };
 
-/* Small inline ParallaxCard component (no external file required) */
+const heroFade = {
+  initial: { opacity: 0, y: 18 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 1.1, ease: 'easeOut' as const },
+};
+
+type SuiteKey = 'room1' | 'room2' | 'room3' | 'room4' | 'room5' | 'room6' | 'room7';
+
+/* Small ParallaxCard component */
 function ParallaxCard({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -40,6 +48,7 @@ function ParallaxCard({ children }: { children: React.ReactNode }) {
     const rotY = x * -6;
     el.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
   }
+
   function handleLeave() {
     const el = ref.current;
     if (!el) return;
@@ -49,17 +58,17 @@ function ParallaxCard({ children }: { children: React.ReactNode }) {
   return (
     <div
       ref={ref}
-      className="parallax-card"
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      style={{ transition: 'transform 550ms cubic-bezier(.2,.9,.2,1)', willChange: 'transform' }}
+      style={{ transition: 'transform 580ms cubic-bezier(.2,.9,.2,1)', willChange: 'transform' }}
+      className="parallax-card"
     >
       {children}
     </div>
   );
 }
 
-/* Magnetic wrapper toggling enlarged cursor state */
+/* Magnetic wrapper - toggles cursor hover state via attribute */
 function Magnetic({ children }: { children: React.ReactNode }) {
   function onEnter() {
     document.documentElement.setAttribute('data-cursor', 'hover');
@@ -77,21 +86,24 @@ function Magnetic({ children }: { children: React.ReactNode }) {
 export default function Page() {
   const suites: SuiteKey[] = ['room2', 'room3', 'room4', 'room5', 'room6', 'room7'];
   const gallery = [
-    'room1','room2','room3','room4','room5','room6','room7',
-    'bar1','bar2','ensuite1','dining','desk'
+    'ensuite1', 'room1', 'room2', 'room3', 'dining', 'dining2',
+    'bar1', 'bar2', 'room4', 'room5', 'room6', 'room7', 'desk', 'honeybear-front'
   ];
 
-  /* Magnetic cursor logic (simple, performant) */
+  /* Magnetic cursor creation */
   useEffect(() => {
     const cursor = document.createElement('div');
     cursor.className = 'mag-cursor';
     document.body.appendChild(cursor);
 
     function move(e: MouseEvent) {
+      // center the dot under the pointer
       const x = e.clientX;
       const y = e.clientY;
+      // translate3d used for better performance
       cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     }
+
     window.addEventListener('mousemove', move);
     return () => {
       window.removeEventListener('mousemove', move);
@@ -103,10 +115,18 @@ export default function Page() {
     <>
       <Head>
         <title>Honeybear Guest Lodge — Your Haven Awaits</title>
-        <meta name="description" content="Honeybear Guest Lodge — a serene boutique retreat in Harare. Find rest, nature and quiet luxury." />
+        <meta
+          name="description"
+          content="Honeybear Guest Lodge — a serene boutique retreat in Harare. Find rest, nature and quiet luxury."
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* crossOrigin set to anonymous (valid CrossOrigin type) */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
+        {/* page-scoped styles: color tokens, cursor, small utilities */}
         <style>{`
           :root{
             --font-display: ${headingFont};
@@ -116,39 +136,39 @@ export default function Page() {
             --bg: #f7f5f2;
             --card: #ffffff;
           }
-          html,body,#__next{height:100%}
-          body{
-            margin:0;
-            background:var(--bg);
-            font-family:var(--font-ui);
+          html, body, #__next { height: 100%; }
+          body {
+            margin: 0;
+            background: var(--bg);
+            font-family: var(--font-ui);
             -webkit-font-smoothing:antialiased;
             -moz-osx-font-smoothing:grayscale;
-            color:#2b2724;
+            color: #2b2724;
           }
-          h1,h2,h3{ font-family:var(--font-display); color: #2b2724; margin:0; }
-          .large-hero{ font-size: clamp(48px, 7.5vw, 88px); line-height:0.95; letter-spacing:-0.02em; }
-          .nav { position: fixed; top: 0; left: 0; right: 0; z-index:60; backdrop-filter: blur(6px) saturate(120%); background: rgba(255,255,255,0.55); border-bottom: 1px solid rgba(0,0,0,0.04); }
+          h1,h2,h3 { font-family: var(--font-display); color: #2b2724; margin:0; }
+          .large-hero { font-size: clamp(48px, 7.5vw, 88px); line-height:0.95; letter-spacing:-0.02em; }
+          .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; backdrop-filter: blur(6px) saturate(120%); background: rgba(255,255,255,0.56); border-bottom: 1px solid rgba(0,0,0,0.04); }
           .nav-inner { max-width: 1200px; margin: 0 auto; padding: 18px 20px; display:flex; align-items:center; justify-content:space-between; }
-          .nav .brand { font-family: var(--font-display); font-weight:500; font-size:20px; letter-spacing:0.02em; color:#2b2724; }
-          .nav a { text-decoration:none; color:#3c3835; margin-left:26px; font-weight:500; }
+          .brand { font-family: var(--font-display); font-weight:500; font-size:20px; color:#2b2724; }
+          .nav a { color:#3c3835; margin-left:26px; text-decoration:none; font-weight:500; }
           .btn-primary { background:var(--accent); color:white; padding:12px 28px; border-radius:999px; display:inline-block; text-decoration:none; box-shadow: 0 10px 30px rgba(10,10,10,0.06); }
-          .btn-ghost { background:#fff; padding:10px 22px; border-radius:999px; border:1px solid rgba(0,0,0,0.06); text-decoration:none; color:#2b2724; }
+          .btn-ghost { background:#fff; padding:10px 22px; border-radius:999px; border:1px solid rgba(0,0,0,0.06); color:#2b2724; text-decoration:none; }
           .section-pad{ padding:80px 20px; }
-          @media(min-width: 1280px){ .section-pad{ padding:120px 40px; } .nav a{ margin-left:34px } }
-          /* magnetic cursor */
+          @media(min-width:1280px){ .section-pad{ padding:120px 40px; } .nav a{ margin-left:34px; } }
+          /* Magnetic cursor */
           .mag-cursor{ width:18px; height:18px; border-radius:50%; background: rgba(255,255,255,0.95); border:1px solid rgba(0,0,0,0.08); position:fixed; pointer-events:none; transform:translate3d(-50%,-50%,0); z-index:9999; transition: width .18s ease, height .18s ease, background .18s ease, transform .18s ease; mix-blend-mode: normal; }
+          /* expand cursor when document attribute is set */
           [data-cursor="hover"] .mag-cursor, a:hover ~ .mag-cursor, button:hover ~ .mag-cursor { width:44px; height:44px; background: rgba(255,255,255,0.78); }
-          /* parallax card helper */
           .parallax-card { display:block; }
-          /* small utility */
           .muted { color:var(--muted); }
         `}</style>
       </Head>
 
+      {/* NAV */}
       <div className="nav" aria-hidden>
         <div className="nav-inner">
           <div className="brand">Honeybear</div>
-          <nav aria-label="Main navigation">
+          <nav aria-label="main navigation">
             <a href="#rooms">Rooms</a>
             <a href="#wellness">Wellness</a>
             <a href="#experiences">Experiences</a>
@@ -158,13 +178,13 @@ export default function Page() {
         </div>
       </div>
 
-      <main style={{ paddingTop: 88 }}>
+      <main style={{ paddingTop: 86 }}>
         {/* HERO */}
         <section style={{ minHeight: '82vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
           <motion.div
             initial={{ scale: 1.06 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 1.8 }}
+            transition={{ duration: 1.8, ease: 'easeOut' }}
             style={{
               position: 'absolute', inset: 0, zIndex: 0,
               backgroundImage: "url('/images/room2.jpg')",
@@ -175,13 +195,13 @@ export default function Page() {
           />
           <div style={{ position:'absolute', inset:0, zIndex:1, background:'linear-gradient(180deg, rgba(247,245,242,0.2), rgba(247,245,242,0.9))' }} />
           <div style={{ position:'relative', zIndex:2, textAlign:'center', width:'100%', maxWidth:1100, padding:'0 20px' }}>
-            <motion.h1 initial={{ opacity:0, y:22 }} animate={{ opacity:1, y:0 }} transition={{ duration: 1.2 }} className="large-hero" style={{ color:'rgba(255,255,255,0.96)', textShadow:'0 8px 30px rgba(0,0,0,0.25)' }}>
+            <motion.h1 {...heroFade} className="large-hero" style={{ color:'rgba(255,255,255,0.96)', textShadow:'0 8px 30px rgba(0,0,0,0.25)' }}>
               Honeybear Guest Lodge
             </motion.h1>
-            <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay: 0.45 }} style={{ marginTop:18, color:'rgba(255,255,255,0.9)', fontSize:18 }}>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45, duration: 0.9, ease: 'easeOut' }} style={{ marginTop:18, color:'rgba(255,255,255,0.9)', fontSize:18 }}>
               An exclusive sanctuary of refined comfort
             </motion.p>
-            <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay: 0.9 }} style={{ marginTop:28 }}>
+            <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay: 0.9, duration:0.8, ease:'easeOut' }} style={{ marginTop:28 }}>
               <a href="#rooms" className="btn-primary" style={{ marginRight:12 }}>Discover Your Sanctuary</a>
               <a href="#contact" className="btn-ghost">Enquire Now</a>
             </motion.div>
@@ -190,7 +210,7 @@ export default function Page() {
 
         {/* PHILOSOPHY */}
         <section className="section-pad" style={{ textAlign:'center' }}>
-          <motion.div initial="initial" animate="animate" variants={fadeUp}>
+          <motion.div initial="initial" animate="animate" variants={fadeUp as any}>
             <div style={{ fontSize:12, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--muted)', marginBottom:12 }}>Our Philosophy</div>
             <h2 style={{ fontSize:42, marginBottom:14 }}>A Place to Breathe</h2>
             <p style={{ maxWidth:920, margin:'0 auto', color:'var(--muted)', fontSize:17, lineHeight:1.7 }}>
@@ -202,7 +222,7 @@ export default function Page() {
 
         {/* ROOMS */}
         <section id="rooms" className="section-pad">
-          <motion.div {...fadeUp}>
+          <motion.div {...fadeUp as any}>
             <div style={{ textAlign:'center', marginBottom:36 }}>
               <div style={{ fontSize:12, letterSpacing:'0.18em', color:'var(--muted)', textTransform:'uppercase' }}>Accommodation</div>
               <h2 style={{ fontSize:40, marginTop:8 }}>Our Rooms & Suites</h2>
@@ -231,14 +251,14 @@ export default function Page() {
         {/* EXPERIENCES */}
         <section id="experiences" className="section-pad">
           <div style={{ maxWidth:1100, margin:'0 auto' }}>
-            <motion.div {...fadeUp}>
+            <motion.div {...fadeUp as any}>
               <div style={{ textAlign:'center', marginBottom:28 }}>
                 <div style={{ fontSize:12, letterSpacing:'0.18em', color:'var(--muted)', textTransform:'uppercase' }}>Experiences</div>
                 <h2 style={{ fontSize:36, marginTop:8 }}>What Awaits You</h2>
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.9 }}>
+            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.9, ease:'easeOut' }}>
               <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:28 }}>
                 {[
                   {title:'Garden Courtyards', text:'Lush green spaces where nature and design harmonize'},
@@ -264,7 +284,7 @@ export default function Page() {
         {/* WELLNESS */}
         <section id="wellness" className="section-pad" style={{ background:'rgba(255,255,255,0.6)' }}>
           <div style={{ maxWidth:1100, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:36, alignItems:'center' }}>
-            <motion.div {...fadeUp}>
+            <motion.div {...fadeUp as any}>
               <div style={{ fontSize:12, letterSpacing:'0.18em', color:'var(--muted)', textTransform:'uppercase' }}>Wellness</div>
               <h2 style={{ fontSize:36, marginTop:8 }}>Wellness & Serenity</h2>
               <p style={{ color:'var(--muted)', maxWidth:560 }}>
@@ -273,7 +293,7 @@ export default function Page() {
               <div style={{ marginTop:18 }}><a className="btn-ghost" href="#wellness">Learn More</a></div>
             </motion.div>
 
-            <motion.div initial={{ opacity:0, x:30 }} whileInView={{ opacity:1, x:0 }} viewport={{ once:true }}>
+            <motion.div initial={{ opacity:0, x:30 }} whileInView={{ opacity:1, x:0 }} viewport={{ once:true }} transition={{ duration:0.9, ease:'easeOut' }}>
               <div style={{ height:420, borderRadius:14, overflow:'hidden' }}>
                 <Image src="/images/bar2.jpg" alt="Wellness" width={1200} height={900} style={{ objectFit:'cover', width:'100%', height:'100%' }} />
               </div>
@@ -284,7 +304,7 @@ export default function Page() {
         {/* LOCATION */}
         <section id="location" className="section-pad">
           <div style={{ maxWidth:1100, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:36, alignItems:'center' }}>
-            <motion.div {...fadeUp}>
+            <motion.div {...fadeUp as any}>
               <div style={{ fontSize:12, letterSpacing:'0.18em', color:'var(--muted)', textTransform:'uppercase' }}>Location</div>
               <h2 style={{ fontSize:32, marginTop:8 }}>Where Harare Meets Harmony</h2>
               <p style={{ color:'var(--muted)', maxWidth:560 }}>
@@ -293,7 +313,7 @@ export default function Page() {
               <div style={{ marginTop:18 }}><a className="btn-ghost" href="#map">View on Map</a></div>
             </motion.div>
 
-            <motion.div initial={{ opacity:0, x:30 }} whileInView={{ opacity:1, x:0 }} viewport={{ once:true }}>
+            <motion.div initial={{ opacity:0, x:30 }} whileInView={{ opacity:1, x:0 }} viewport={{ once:true }} transition={{ duration:0.9, ease:'easeOut' }}>
               <div style={{ borderRadius:12, height:340, background:'rgba(245,243,241,0.7)', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--muted)' }}>
                 Map Placeholder
               </div>
@@ -304,7 +324,7 @@ export default function Page() {
         {/* GALLERY */}
         <section id="gallery" className="section-pad">
           <div style={{ maxWidth:1200, margin:'0 auto' }}>
-            <motion.div {...fadeUp}>
+            <motion.div {...fadeUp as any}>
               <div style={{ textAlign:'center', marginBottom:20 }}>
                 <div style={{ fontSize:12, letterSpacing:'0.18em', color:'var(--muted)', textTransform:'uppercase' }}>Gallery</div>
                 <h2 style={{ fontSize:36, marginTop:8 }}>Glimpses of Honeybear</h2>
@@ -323,7 +343,7 @@ export default function Page() {
 
         {/* CTA */}
         <section className="section-pad" style={{ textAlign:'center' }}>
-          <motion.div {...fadeUp}>
+          <motion.div {...fadeUp as any}>
             <h2 style={{ fontSize:32 }}>Your Haven Awaits</h2>
             <p style={{ color:'var(--muted)', maxWidth:800, margin:'12px auto 18px' }}>Step into a world where nature and luxury intertwine. Reserve your stay at Honeybear Guest Lodge today.</p>
             <a href="#reserve" className="btn-primary">Reserve Your Stay</a>
