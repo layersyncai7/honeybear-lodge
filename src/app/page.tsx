@@ -141,7 +141,7 @@ export default function Home() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(/images/hero.jpg)',
+            backgroundImage: 'url(/images/room2.jpg)',
           }}
         />
         <div className="relative z-20 text-center text-white px-4 animate-fade-in-slow">
@@ -188,7 +188,7 @@ export default function Home() {
               <div className="aspect-[4/5] mb-6 overflow-hidden rounded-lg">
                 <div
                   className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: 'url(/images/standard-room.jpg)' }}
+                  style={{ backgroundImage: 'url(/images/room3.jpg)' }}
                 />
               </div>
               <h3 className="text-2xl font-semibold mb-3">Standard Rooms</h3>
@@ -205,7 +205,7 @@ export default function Home() {
               <div className="aspect-[4/5] mb-6 overflow-hidden rounded-lg">
                 <div
                   className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: 'url(/images/wellness-suite.jpg)' }}
+                  style={{ backgroundImage: 'url(/images/room4.jpg)' }}
                 />
               </div>
               <h3 className="text-2xl font-semibold mb-3">Wellness Suites</h3>
@@ -222,7 +222,7 @@ export default function Home() {
               <div className="aspect-[4/5] mb-6 overflow-hidden rounded-lg">
                 <div
                   className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: 'url(/images/family-suite.jpg)' }}
+                  style={{ backgroundImage: 'url(/images/ensuite1.jpg)' }}
                 />
               </div>
               <h3 className="text-2xl font-semibold mb-3">Family Suites</h3>
@@ -245,7 +245,7 @@ export default function Home() {
               <div className="aspect-[3/4] rounded-lg overflow-hidden">
                 <div
                   className="w-full h-full bg-cover bg-center"
-                  style={{ backgroundImage: 'url(/images/wellness.jpg)' }}
+                  style={{ backgroundImage: 'url(/images/bar2.jpg)' }}
                 />
               </div>
             </div>
