@@ -99,7 +99,7 @@ export default function HomePage() {
                   <div className="rounded-2xl overflow-hidden shadow-lg">
                     <div
                       className="h-[420px] bg-cover bg-center"
-                      style={{ backgroundImage: `url('/${s}.jpg')` }}
+                      style={{ backgroundImage: `url('/images/room2${s}.jpg')` }}
                     />
                     <div className="p-6">
                       <h3 className="uppercase tracking-wide text-lg">Luxury Suite</h3>
@@ -156,7 +156,7 @@ export default function HomePage() {
                 >
                   <div
                     className="h-48 bg-cover bg-center"
-                    style={{ backgroundImage: `url('/${g}.jpg')` }}
+                    style={{ backgroundImage: `url('/images/room3.jpg')` }}
                   />
                 </motion.div>
               </Magnetic>
