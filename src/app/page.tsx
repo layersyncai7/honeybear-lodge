@@ -21,10 +21,10 @@ export default function HomePage() {
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
-  const suites = ["room2", "room3", "room4", "room5", "room6", "room7"];
+  const suites = ["/images/room2", "/images/room3", "/images/room4", "/images/room5", "/images/room6", "/images/room7"];
   const gallery = [
-    "room1","room2","room3","room4","room5","room6","room7",
-    "bar1","bar2","ensuite1","dining","desk"
+    "images/room1","images/room2","images/room3","images/room4","images/room5","images/room6","images/room7",
+    "images/bar1","images/bar2","images/ensuite1","images/dining","images/desk"
   ];
 
   return (
