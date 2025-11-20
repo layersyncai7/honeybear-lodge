@@ -1,18 +1,4 @@
-/* === Luxury Magnetic Cursor === */ 
-.mag-cursor { 
-  width: 22px; height: 22px; 
-  background: rgba(255,255,255,0.8); 
-  border: 1px solid rgba(0,0,0,0.15); 
-  backdrop-filter: blur(6px); 
-  position: fixed; top: 0; left: 0; 
-  border-radius: 50%; 
-  transform: translate(-50%, -50%); 
-  pointer-events: none; z-index: 9999; 
-  transition: transform 0.15s ease-out, width 0.25s ease, height 0.25s ease;
-} 
-a:hover ~ .mag-cursor, 
-button:hover ~ .mag-cursor, 
-.parallax-card:hover ~ .mag-cursor { 
-  width: 40px; height: 40px; background: rgba(255,255,255,0.6); 
-} 
+.mag-cursor { width: 18px; height: 18px; background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.08); position: fixed; top: 0; left: 0; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 9999; transition: transform 0.12s ease-out, width 0.18s ease, height 0.18s ease, background 0.18s ease; mix-blend-mode: normal; }
+[data-cursor="hover"] .mag-cursor, a:hover ~ .mag-cursor, button:hover ~ .mag-cursor, .parallax-card:hover ~ .mag-cursor { width: 44px; height: 44px; background: rgba(255,255,255,0.75); }
 body { cursor: none; }
+@media (max-width: 640px) { .mag-cursor { display: none; } }
