@@ -1,17 +1,17 @@
+// src/app/ClientBody.tsx
 "use client";
 
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
-export default function ClientBody({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  // Remove any extension-added classes during hydration
+export default function ClientBody({ children }: { children?: ReactNode }) {
+  // Optional: run client-side body adjustments on mount
   useEffect(() => {
-    // This runs only on the client after hydration
-    document.body.className = "antialiased";
+    // Example: ensure body has antialiased class
+    if (typeof document !== "undefined") {
+      document.body.classList.add("antialiased");
+    }
   }, []);
 
-  return <div className="antialiased">{children}</div>;
+  // If children present, render them; otherwise render nothing (or a fragment)
+  return <>{children ?? null}</>;
 }
